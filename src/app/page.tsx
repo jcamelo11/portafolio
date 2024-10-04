@@ -8,9 +8,11 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
-import {BriefcaseBusiness, Cake, MailPlus, Github, Linkedin, GraduationCap, CircleUserRound, Palette, MapPin, BadgeCheck, Heart, ThumbsUp, Flame, TvMinimalPlay, AtSign } from "lucide-react"
+import {BriefcaseBusiness, Cake, MailPlus, Github, Linkedin, GraduationCap, CircleUserRound, Palette, MapPin, BadgeCheck, Heart, Flame, TvMinimalPlay, AtSign } from "lucide-react"
 import Image from 'next/image'
-import emailjs from "emailjs-com";
+import { Skeleton } from "@/components/ui/skeleton"
+
+
 
 
 const projects = [
@@ -56,7 +58,9 @@ const projects = [
 export default function PortfolioProfile() {
 
   const [isModalOpen, setIsModalOpen, ] = useState(false);
+  
   const [likes, setLikes] = useState<{[key: number]: boolean}>({});
+  const [isLoading, setIsLoading] = useState(true);
   
 
   useEffect(() => {
@@ -64,6 +68,11 @@ export default function PortfolioProfile() {
     if (storedLikes) {
       setLikes(JSON.parse(storedLikes));
     }
+    // Simulate loading delay
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleLike = (projectId: number) => {
@@ -76,6 +85,33 @@ export default function PortfolioProfile() {
       return newLikes;
     });
   };
+
+  const ProjectSkeleton = () => (
+    <div className="space-y-4">
+      <div className="flex items-center space-x-3">
+        <Skeleton className="h-12 w-12 rounded-full" />
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-[200px]" />
+          <Skeleton className="h-4 w-[100px]" />
+        </div>
+      </div>
+      <Skeleton className="h-4 w-[300px]" />
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-[200px] w-full rounded-lg" />
+      <div className="flex space-x-3">
+        <Skeleton className="h-10 w-20" />
+        <Skeleton className="h-10 w-20" />
+        <Skeleton className="h-10 w-20" />
+      </div>
+    </div>
+  )
+
+  useEffect(() => {
+    console.log('isLoading:', isLoading);
+  }, [isLoading]);
+  
+  console.log('Rendering, isLoading:', isLoading);
   
 
   return (
@@ -240,58 +276,67 @@ export default function PortfolioProfile() {
               </CardHeader>
             <CardContent className="p-">
               <div className="space-y-6">
-                {projects.map((project) => (
-                  <div key={project.id} className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0">
-                    <div className="flex items-center space-x-3 mb-3">
-                      <Avatar>
-                        <AvatarImage src="images/porfile.jpg" alt="Jhonatan Camelo" />
-                        <AvatarFallback>JC</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-semibold flex items-center gap-1">
-                          Jhonatan Camelo
-                          <BadgeCheck className="h-4 w-4" />
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Hace 3 horas</p>
+                {isLoading ? (
+                  <>
+                    <ProjectSkeleton />
+                    <ProjectSkeleton />
+                    <ProjectSkeleton />
+                    <ProjectSkeleton />
+                  </>
+                ) : (
+                  projects.map((project) => (
+                    <div key={project.id} className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0">
+                      <div className="flex items-center space-x-3 mb-3">
+                        <Avatar>
+                          <AvatarImage src="images/porfile.jpg" alt="Jhonatan Camelo" />
+                          <AvatarFallback>JC</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="font-semibold flex items-center gap-1">
+                            Jhonatan Camelo
+                            <BadgeCheck className="h-4 w-4" />
+                          </p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">Hace 3 horas</p>
+                        </div>
                       </div>
-                    </div>
 
-                    <p className="text-lg font-bold mb-1">{project.title}</p>
-                    <p className="mb-2">{project.description}</p>
-                    <div className="flex gap-2 mb-3">
-                      {project.tags.map((tag, index) => (
-                        <a key={index} className="text-sm font-semibold hover:underline">#{tag}</a>
-                      ))}
-                    </div>
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      width={800}
-                      height={400}
-                      className="w-full rounded-lg mb-3"
-                    />
-                    <div className="flex items-center justify-around mt-4 pt-4 gap-3">
-                      <Button variant="ghost" onClick={() => handleLike(project.id)}>
-                        <Heart className={`mr-2 h-4 w-4 ${likes[project.id] ? 'fill-current text-black' : ''}`} />
-                        {likes[project.id] ? <strong>Dislike</strong> : 'Like'}
-                      </Button>
-                      <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                        <Button variant="outline">
-                          <Github className="mr-2 h-4 w-4" />
-                          Code
+                      <p className="text-lg font-bold mb-1">{project.title}</p>
+                      <p className="mb-2">{project.description}</p>
+                      <div className="flex gap-2 mb-3">
+                        {project.tags.map((tag, index) => (
+                          <a key={index} className="text-sm font-semibold hover:underline">#{tag}</a>
+                        ))}
+                      </div>
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        width={800}
+                        height={400}
+                        className="w-full rounded-lg mb-3"
+                      />
+                      <div className="flex items-center justify-around mt-4 pt-4 gap-3">
+                        <Button variant="ghost" onClick={() => handleLike(project.id)}>
+                          <Heart className={`mr-2 h-4 w-4 ${likes[project.id] ? 'fill-current text-black' : ''}`} />
+                          {likes[project.id] ? <strong>Dislike</strong> : 'Like'}
                         </Button>
-                      </a>
-                      {project.previewUrl && (
-                        <a href={project.previewUrl} target="_blank" rel="noopener noreferrer">
-                          <Button>
-                            <TvMinimalPlay className="mr-2 h-4 w-4" />
-                            Preview
+                        <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                          <Button variant="outline">
+                            <Github className="mr-2 h-4 w-4" />
+                            Code
                           </Button>
                         </a>
-                      )}
+                        {project.previewUrl && (
+                          <a href={project.previewUrl} target="_blank" rel="noopener noreferrer">
+                            <Button>
+                              <TvMinimalPlay className="mr-2 h-4 w-4" />
+                              Preview
+                            </Button>
+                          </a>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </CardContent>
           </Card>
