@@ -8,37 +8,87 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
-import {BriefcaseBusiness, Cake, MailPlus, Github, Linkedin, GraduationCap, CircleUserRound, Palette, MapPin, BadgeCheck, Share2, MessageSquare, ThumbsUp, Flame, TvMinimalPlay, AtSign } from "lucide-react"
+import {BriefcaseBusiness, Cake, MailPlus, Github, Linkedin, GraduationCap, CircleUserRound, Palette, MapPin, BadgeCheck, Heart, ThumbsUp, Flame, TvMinimalPlay, AtSign } from "lucide-react"
+import Image from 'next/image'
+import emailjs from "emailjs-com";
+
+
+const projects = [
+  {
+    id: 1,
+    title: "Sistema de turnos",
+    description: "Este proyecto es una simulación de un sistema de turnos para un hospital, que muestra el nombre del paciente y el módulo al que debe dirigirse.",
+    tags: ["React", "Nextjs"],
+    image: "/images/proyecto-turnos.png",
+    githubUrl: "https://github.com/jcamelo11/sistema-de-turnos.git",
+    previewUrl: "https://sistema-de-turnos.vercel.app/"
+  },
+  {
+    id: 2,
+    title: "Sistema de apoyo en la etapa productiva",
+    description: "Este sito ha sido diseñado para los aprendices en su etapa productiva, proporcionando toda la información necesaria sobre el proceso. Su funcionalidad principal es una guía interactiva que explica detalladamente cómo completar los informes que los aprendices deben entregar.",
+    tags: ["HTML", "CSS", "JavaScript", "Bootstrap"],
+    image: "/images/proyecto-sena.png",
+    githubUrl: "https://github.com/jcamelo11/proyecto-sena.git",
+    previewUrl: "https://seguimientocbc.000.pe/"
+  },
+  {
+    id: 3,
+    title: "Encriptador de textos",
+    description: "Encriptador de texto en JavaScript que permite cifrar y descifrar mensajes de forma sencilla. La aplicación utiliza una lógica personalizada para transformar el texto de entrada en un formato cifrado, lo que garantiza que el contenido original no sea legible a simple vista.",
+    tags: ["HTML", "CSS", "JavaScript"],
+    image: "/images/encriptador.png",
+    githubUrl: "https://github.com/jcamelo11/ChallegerOracleONE.git",
+    previewUrl: "https://jcamelo11.github.io/ChallegerOracleONE/"
+  },
+  {
+    id: 4,
+    title: "Sistema de registro y avistamiento de aves",
+    description: "Este proyecto es un sistema de registro y avistamiento de aves diseñado para que los aprendices del Centro Biotecnológico del Caribe puedan documentar y compartir sus avistamientos de manera eficiente. La plataforma permite a los usuarios registrar detalles de las especies observadas, el área geográfica y la cantidad de aves vistas.",
+    tags: ["Bootstrap", "PHP", "Laravel", "MySQL"],
+    image: "/images/proyecto-bio.png",
+    githubUrl: "https://github.com/jcamelo11/biosoftwaree.git",
+    previewUrl: null
+  }
+]
 
 
 export default function PortfolioProfile() {
 
   const [isModalOpen, setIsModalOpen, ] = useState(false);
-  const [liked, setLiked] = useState(false);
+  const [likes, setLikes] = useState<{[key: number]: boolean}>({});
+  
 
-  // Cargar el estado de "like" desde localStorage al montar el componente
   useEffect(() => {
-    const storedLiked = localStorage.getItem('liked');
-    if (storedLiked === 'true') {
-      setLiked(true);
+    const storedLikes = localStorage.getItem('projectLikes');
+    if (storedLikes) {
+      setLikes(JSON.parse(storedLikes));
     }
   }, []);
 
-  const handleLike = () => {
-    const newLikedState = !liked;
-    setLiked(newLikedState); // Cambia el estado de "like"
-    localStorage.setItem('liked', JSON.stringify(newLikedState)); // Guarda el nuevo estado en localStorage
+  const handleLike = (projectId: number) => {
+    setLikes(prevLikes => {
+      const newLikes = {
+        ...prevLikes,
+        [projectId]: !prevLikes[projectId]
+      };
+      localStorage.setItem('projectLikes', JSON.stringify(newLikes));
+      return newLikes;
+    });
   };
+  
 
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="max-w-5xl mx-auto">
         {/* Cover Photo */}
         <div className="relative h-80 bg-gray-300 rounded-b-lg overflow-hidden">
-          <img
-            src="images/portada.svg"
+          <Image
+            src="/images/portada.svg"
             alt="Cover"
-            className="w-full h-full object-cover"
+            layout="fill"
+            objectFit="cover"
+            priority
           />
         </div>
 
@@ -190,92 +240,62 @@ export default function PortfolioProfile() {
               </CardHeader>
             <CardContent className="p-">
               <div className="space-y-6">
-               
-                  <div  className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0">
+                {projects.map((project) => (
+                  <div key={project.id} className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0">
                     <div className="flex items-center space-x-3 mb-3">
                       <Avatar>
-                        <AvatarImage src="images/porfile.jpg" alt="Juan Pérez" />
-                        <AvatarFallback>JP</AvatarFallback>
+                        <AvatarImage src="images/porfile.jpg" alt="Jhonatan Camelo" />
+                        <AvatarFallback>JC</AvatarFallback>
                       </Avatar>
                       <div>
-                        <p className="font-semibold flex items-center gap-1">Jhonatan Camelo<BadgeCheck className="mr-2 h-4 w-4"/></p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Hace  horas</p>
+                        <p className="font-semibold flex items-center gap-1">
+                          Jhonatan Camelo
+                          <BadgeCheck className="h-4 w-4" />
+                        </p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Hace 3 horas</p>
                       </div>
                     </div>
-                    <p className=" text-lg font-bold mb-1">Sistema de apoyo en la etapa productiva</p>
-                    <p className="mb-3">Este sito ha sido diseñado para los aprendices en su etapa productiva, proporcionando toda la información necesaria sobre el proceso. Su funcionalidad principal es una guía interactiva que explica detalladamente cómo completar los informes que los aprendices deben entregar. </p>
-                    <img
-                      src={`images/proyecto-sena.png`}
-                      alt={`Post `}
+
+                    <p className="text-lg font-bold mb-1">{project.title}</p>
+                    <p className="mb-2">{project.description}</p>
+                    <div className="flex gap-2 mb-3">
+                      {project.tags.map((tag, index) => (
+                        <a key={index} className="text-sm font-semibold hover:underline">#{tag}</a>
+                      ))}
+                    </div>
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      width={800}
+                      height={400}
                       className="w-full rounded-lg mb-3"
                     />
-                    <div className="flex  items-center mt-4 pt-4 gap-3 ">
-                      <Button variant="ghost"  onClick={handleLike}>
-                        <ThumbsUp className="mr-2 h-4 w-4" />
-                        {liked ? <strong>Te gusta</strong> : 'Me gusta'} {/* Cambia el texto según el estado */}
+                    <div className="flex items-center justify-around mt-4 pt-4 gap-3">
+                      <Button variant="ghost" onClick={() => handleLike(project.id)}>
+                        <Heart className={`mr-2 h-4 w-4 ${likes[project.id] ? 'fill-current text-black' : ''}`} />
+                        {likes[project.id] ? <strong>Dislike</strong> : 'Like'}
                       </Button>
-                      <a href="https://github.com/jcamelo11/proyecto-sena.git" target="_blank" rel="noopener noreferrer">
+                      <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
                         <Button variant="outline">
                           <Github className="mr-2 h-4 w-4" />
                           Code
                         </Button>
                       </a>
-                      <a href="https://seguimientocbc.000.pe/" target="_blank" rel="noopener noreferrer">
-                        <Button  >
-                          <TvMinimalPlay className="mr-2 h-4 w-4" />
-                          Live
-                        </Button>
-                      </a>
-                        
-                       
+                      {project.previewUrl && (
+                        <a href={project.previewUrl} target="_blank" rel="noopener noreferrer">
+                          <Button>
+                            <TvMinimalPlay className="mr-2 h-4 w-4" />
+                            Preview
+                          </Button>
+                        </a>
+                      )}
                     </div>
                   </div>
-
-                  <div  className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0">
-                    <div className="flex items-center space-x-3 mb-3">
-                      <Avatar>
-                        <AvatarImage src="images/porfile.jpg" alt="Juan Pérez" />
-                        <AvatarFallback>JP</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-semibold flex items-center gap-1">Jhonatan Camelo<BadgeCheck className="mr-2 h-4 w-4"/></p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Hace 3 horas</p>
-                      </div>
-                    </div>
-                    <p className=" text-lg font-bold mb-1">Sistema de apoyo en la etapa productiva</p>
-                    <p className="mb-3">Este sito ha sido diseñado para los aprendices en su etapa productiva, proporcionando toda la información necesaria sobre el proceso. Su funcionalidad principal es una guía interactiva que explica detalladamente cómo completar los informes que los aprendices deben entregar. </p>
-                    <img
-                      src={`images/proyecto-sena.png`}
-                      alt={`Post `}
-                      className="w-full rounded-lg mb-3"
-                    />
-                    <div className="flex  items-center mt-4 pt-4 ">
-                      <Button variant="ghost"  onClick={handleLike}>
-                        <ThumbsUp className="mr-2 h-4 w-4" />
-                        {liked ? <strong>Te gusta</strong> : 'Me gusta'} {/* Cambia el texto según el estado */}
-                      </Button>
-                      <a href="https://github.com/jcamelo11/proyecto-sena.git" target="_blank" rel="noopener noreferrer">
-                        <Button variant="ghost">
-                          <Github className="mr-2 h-4 w-4" />
-                          Code
-                        </Button>
-                      </a>
-                      <a href="https://seguimientocbc.000.pe/" target="_blank" rel="noopener noreferrer">
-                        <Button variant="ghost" >
-                          <TvMinimalPlay className="mr-2 h-4 w-4" />
-                          Live
-                        </Button>
-                      </a>
-                        
-                       
-                    </div>
-                  </div>
-                
+                ))}
               </div>
             </CardContent>
           </Card>
-
-           
+          
           </div>
         </div>
       </div>
@@ -283,15 +303,9 @@ export default function PortfolioProfile() {
       {/* Footer */}
       <footer className="mt-12 mb-6 px-4 sm:px-6 lg:px-8">
         <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-          <nav className="flex flex-wrap justify-center space-x-4 text-sm">
-            <a href="#" className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">Privacidad</a>
-            <a href="#" className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">Términos</a>
-            <a href="#" className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">Publicidad</a>
-            <a href="#" className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">Cookies</a>
-            <a href="#" className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">Más</a>
-          </nav>
+          
           <p className="mt-4 text-center text-sm text-gray-400 dark:text-gray-500">
-            © 2024 Facebook Clone. Todos los derechos reservados.
+            © 2024 Jhonatan Camelo. Todos los derechos reservados.
           </p>
         </div>
       </footer>
