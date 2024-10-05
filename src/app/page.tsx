@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardHeader, CardTitle,  } from "@/components/ui/card"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+
 import {BriefcaseBusiness, Cake, MailPlus, Github, Linkedin, GraduationCap, CircleUserRound, Palette, MapPin, BadgeCheck, Heart, Flame, TvMinimalPlay, AtSign } from "lucide-react"
 import Image from 'next/image'
 import { Skeleton } from "@/components/ui/skeleton"
@@ -57,7 +56,6 @@ const projects = [
 
 export default function PortfolioProfile() {
 
-  const [isModalOpen, setIsModalOpen, ] = useState(false);
   
   const [likes, setLikes] = useState<{[key: number]: boolean}>({});
   const [isLoading, setIsLoading] = useState(true);
@@ -142,7 +140,7 @@ export default function PortfolioProfile() {
               <p className="text-gray-500 items-center">Desarrollador junior</p>
             </div>
             <div className="mt-4 sm:mt-0 sm:ml-auto flex space-x-2">
-              <Button onClick={() => setIsModalOpen(true)}>
+              <Button >
                 <MailPlus className="mr-2 h-4 w-4" />
                 Contactar
               </Button>
@@ -334,37 +332,7 @@ export default function PortfolioProfile() {
         </div>
       </footer>
 
-      {/* Add Friend Modal */}
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Contactarme</DialogTitle>
-           
-              <form className="space-y-4 py-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <Input placeholder="Nombre" />
-                    <Input placeholder="Email" type="email" />
-                  </div>
-                  <Input placeholder="Asunto" />
-                  <Textarea placeholder="Mensaje" />
-
-              </form>
-            
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsModalOpen(false)}>
-              Cancelar
-            </Button>
-            <Button onClick={() => {
-              // Here you would typically send the friend request
-              console.log("Friend request sent")
-              setIsModalOpen(false)
-            }}>
-              Contactar
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      
 
     </div>
   )
