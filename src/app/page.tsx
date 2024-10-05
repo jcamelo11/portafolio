@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 import {BriefcaseBusiness, Cake, MailPlus, Github, Linkedin, GraduationCap, CircleUserRound, Palette, MapPin, BadgeCheck, Heart, Flame, TvMinimalPlay, AtSign } from "lucide-react"
 import Image from 'next/image'
@@ -112,6 +112,8 @@ export default function PortfolioProfile() {
   }, [isLoading]);
   
   console.log('Rendering, isLoading:', isLoading);
+
+  
   
 
   return (
@@ -136,8 +138,8 @@ export default function PortfolioProfile() {
               <AvatarFallback>JC</AvatarFallback>
             </Avatar>
             <div className="mt-4 sm:mt-0 sm:ml-4 text-center sm:text-left">
-            <h1 className="text-2xl font-bold flex items-center">Jhonatan Camelo<BadgeCheck className="ml-2" /></h1>
-              <p className="text-gray-500 items-center">Junior Back-end Developer</p>
+            <h1 className="text-2xl font-bold flex items-center">Jhonatan Camelo<BadgeCheck className="ml-1" /></h1>
+              <p className="text-gray-500 items-center">Desarrollador junior</p>
             </div>
             <div className="mt-4 sm:mt-0 sm:ml-auto flex space-x-2">
               <Button onClick={() => setIsModalOpen(true)}>
@@ -150,10 +152,13 @@ export default function PortfolioProfile() {
                   GitHub
                 </Button>
               </a>
-              <Button variant="outline">
-                <Linkedin className="mr-2 h-4 w-4" />
-                LinkedIn
-              </Button>
+              <a href="https://www.linkedin.com/in/jcamelo12" target="_blank" rel="noopener noreferrer">
+                <Button variant="outline">
+                  <Linkedin className="mr-2 h-4 w-4" />
+                  LinkedIn
+                </Button>
+              </a>
+             
             </div>
           </div>
 
@@ -171,7 +176,8 @@ export default function PortfolioProfile() {
               </CardHeader>
               <CardContent>
                 <p className="mb-4">
-                Soy un desarrollador junior que codifica por el día y sueña con líneas de código por la noche. Mi pasión por aprender es tan grande que a veces me pregunto si debería cobrar por mis horas de ‘investigación’. Si quieres a alguien que convierta problemas en soluciones creativas y añada un toque de humor a cada proyecto, ¡hablemos!
+                Soy un desarrollador junior que codifica por el día y sueña con líneas de código por la noche. 
+                Mi pasión por aprender es tan grande que a veces me pregunto si debería cobrar por mis horas de ‘investigación’. Si quieres a alguien que convierta problemas en soluciones creativas y añada un toque de humor a cada proyecto, ¡hablemos!
                 </p>
                 <p className="text-sm flex items-center"><BriefcaseBusiness className="mr-2 h-4 w-4" /> Disponible</p>
                 <p className="text-sm mt-2 flex items-center"><AtSign  className="mr-2 h-4 w-4" /> jcamelo625@gmail.com</p>
@@ -198,38 +204,11 @@ export default function PortfolioProfile() {
             </Card>
           </div>
 
+          
+
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Projects */}
-            {/* <Card>
-              <CardHeader>
-                <CardTitle>Proyectos Destacados</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="font-semibold">E-commerce Platform</h3>
-                      <p className="text-sm text-gray-500">Una plataforma de comercio electrónico completa</p>
-                    </div>
-                    <Button variant="outline" size="sm">
-                      <ExternalLink className="mr-2 h-4 w-4" />
-                      Ver Proyecto
-                    </Button>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="font-semibold">Task Management App</h3>
-                      <p className="text-sm text-gray-500">Aplicación de gestión de tareas con React y Node.js</p>
-                    </div>
-                    <Button variant="outline" size="sm">
-                      <ExternalLink className="mr-2 h-4 w-4" />
-                      Ver Proyecto
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card> */}
+
 
             {/* Education */}
             <Card>
@@ -238,16 +217,16 @@ export default function PortfolioProfile() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
+                <div>
+                    <h3 className="font-semibold">Especialización front-end</h3>
+                    <p className="text-sm ">Programa ONE next education |Alura + Oracle|</p>
+                    <p className="text-sm text-gray-500">Jun 2024 - Actualidad</p>
+                  </div> 
                   <div>
                     <h3 className="font-semibold">Tnlgo. En Análisis y Desarrollo de Sistemas de Información</h3>
                     <p className="text-sm">Servicio Nacianal de Aprendizaje - SENA </p>
                     <p className="text-sm text-gray-500">Valledupar, Cesar • Oct 2021 - Abril 2024</p>
                   </div>
-                  {/* <div>
-                    <h3 className="font-semibold">Desarrollador Front-end</h3>
-                    <p className="text-sm text-gray-500">Web Solutions Inc. • 2018 - 2020</p>
-                    <p className="text-sm mt-2">Creación de interfaces de usuario interactivas y responsivas con HTML, CSS y JavaScript.</p>
-                  </div> */}
                 </div>
               </CardContent>
             </Card>
@@ -317,7 +296,7 @@ export default function PortfolioProfile() {
                       <div className="flex items-center justify-around mt-4 pt-4 gap-3">
                         <Button variant="ghost" onClick={() => handleLike(project.id)}>
                           <Heart className={`mr-2 h-4 w-4 ${likes[project.id] ? 'fill-current text-black' : ''}`} />
-                          {likes[project.id] ? <strong>Dislike</strong> : 'Like'}
+                          {likes[project.id] ? <strong>Like</strong> : 'Like'}
                         </Button>
                         <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
                           <Button variant="outline">
