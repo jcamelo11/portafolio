@@ -120,7 +120,7 @@ export default function PortfolioProfile() {
         {/* Cover Photo */}
         <div className="relative h-80 bg-gray-300 rounded-b-lg overflow-hidden">
           <Image
-            src="/images/portada.svg"
+            src="/images/portada1.svg"
             alt="Cover"
             layout="fill"
             objectFit="cover"
