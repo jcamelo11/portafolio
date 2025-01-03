@@ -111,10 +111,8 @@ export default function PortfolioProfile() {
   
   console.log('Rendering, isLoading:', isLoading);
 
-  
-  
-
   return (
+    
     <div className="min-h-screen bg-gray-100">
       <div className="max-w-5xl mx-auto">
         {/* Cover Photo */}
